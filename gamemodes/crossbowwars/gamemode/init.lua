@@ -10,7 +10,7 @@ function GM:CreateTeams()
 end
 
 function GM:PlayerSpawn( ply )
-	PrintMessage(4, "Knot my thrussy pwease")
+	//PrintMessage(4, "Knot my thrussy pwease")
 end
 
 function ChangeMyTeam( ply, cmd, args )

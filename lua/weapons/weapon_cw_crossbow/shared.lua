@@ -33,8 +33,6 @@ function SWEP:PrimaryAttack()
     info.Attacker = pPlayer;
     //print("ok")
     if ( CLIENT ) then return end
-    if (SERVER) then return end
-    for i = 1, info.Num do 
         local Src = Vector(info.Spread,info.Spread,info.Spread)// || vec3_origin
         local Dir = info.Dir// + Vector( math.Rand( -Src.x, Src.x ), math.Rand( -Src.y, Src.y ), math.Rand( -Src.y, Src.y ) )
         //if CLIENT then return end
@@ -44,15 +42,16 @@ function SWEP:PrimaryAttack()
         pBolt.m_iDamage = self.Primary.Damage;
         pBolt:SetOwner( pPlayer );
         pBolt:Spawn()
-
+        
         pBolt:SetPos( info.Src + ( Dir * pBolt:BoundingRadius() ) );
 
         if ( pPlayer:WaterLevel() == 3 ) then
             pBolt:SetVelocity( Dir * 500 );
         else
-            pBolt:SetVelocity( Dir * 3400);
+            print("set vel")
+            pBolt:GetPhysicsObject():AddVelocity( Dir * 3400);
+            print(pBolt:GetVelocity())
         end
-    end
 end
 
 function SWEP:ShootBullet(damage, num_bullets, aimcone)

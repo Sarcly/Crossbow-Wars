@@ -3,4 +3,4 @@ ENT.Base = "base_gmodentity"
  
 ENT.PrintName = "Bolt"
 ENT.Category = "Crossbow Wars"
-ENT.Spawnable = false 
+ENT.Spawnable = true 
