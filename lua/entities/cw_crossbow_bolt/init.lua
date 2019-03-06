@@ -36,11 +36,14 @@ function ENT:PhysicsCollide(collisionData, physObj)
         local tr = self:GetTouchTrace()
         local vecNormalizedVel = self:GetAbsVelocity():GetNormalized()
         if(pOther:IsNPC()) then
-            local dmgInfo = DamageInfo(self, self:GetOwner(), self.m_iDamage, DMG_NEVERGIB)
+            local dmgInfo = DamageInfo(self, self.Attacker, self.m_iDamage, DMG_NEVERGIB)
             dmgInfo:SetDamagePosition(tr.HitPos)
             pOther:DispatchTraceAttack(dmgInfo,tr, vecNormalizedVel )
         else
-            local dmgInfo = DamageInfo( self, self:GetOwner(),self.m_iDamage, DMG_BULLET || DMG_NEVERGIB );
+            local dmgInfo = DamageInfo( );
+            dmgInfo:SetAttacker(self.Attacker)
+            dmgInfo:SetDamageType(DMG_NEVERGIB)
+            dmgInfo:SetDamage(10000)
             dmgInfo:SetDamagePosition( tr.HitPos );
             pOther:DispatchTraceAttack( dmgInfo, tr, vecNormalizedVel);
         end
@@ -69,4 +72,8 @@ function ENT:PhysicsCollide(collisionData, physObj)
         
         end
     end
+end
+
+function GM:EntityTakeDamage(target, dmginfo)
+    
 end

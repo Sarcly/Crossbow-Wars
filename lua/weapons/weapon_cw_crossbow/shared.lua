@@ -40,7 +40,7 @@ function SWEP:PrimaryAttack()
         pBolt:SetPos( info.Src + ( Dir * 32 ) )
         pBolt:SetAngles( Dir:Angle() );
         pBolt.m_iDamage = self.Primary.Damage;
-        pBolt:SetOwner( pPlayer );
+        pBolt.Attacker = self.Owner
         pBolt:Spawn()
         
         pBolt:SetPos( info.Src + ( Dir * pBolt:BoundingRadius() ) );
