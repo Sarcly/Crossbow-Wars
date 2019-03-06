@@ -1,5 +1,5 @@
 SWEP.PrintName = "Kitchen Gun"
-SWEP.Category = "Other"
+SWEP.Category = "Crossbow Wars"
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
 

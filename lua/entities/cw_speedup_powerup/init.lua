@@ -34,11 +34,10 @@ end
 function ENT:Use( activator, caller )
     activator:SetWalkSpeed(500)
     activator:SetRunSpeed(500)
-    if timer.Exists("SpeedupTimer_"..ply:AccountID()) then
-        print("Destroying Timer")
-        timer.Destroy("SpeedupTimer_"..ply:AccountID())
+    if timer.Exists("SpeedupTimer_"..activator:AccountID()) then
+        timer.Destroy("SpeedupTimer_"..activator:AccountID())
     end
-    timer.Create("SpeedupTimer_"..activator:AccountID(),GetConVar("cw_powerupduration"):GetInt(),1, function()
+    timer.Create("SpeedupTimer_"..activator:AccountID(),GetConVar("cw_speedup_duration"):GetInt(),1, function()
         print("Speedup turns off")
         activator:SetWalkSpeed(DEFAULT_WALKSPEED)
         activator:SetRunSpeed(DEFAULT_RUNSPEED)
@@ -51,8 +50,7 @@ function ENT:OnTakeDamage(damage)
     activator:SetWalkSpeed(500)
     activator:SetRunSpeed(500)
 
-    timer.Create("SpeedupTimer_"..activator:AccountID(),GetConVar("cw_powerupduration"):GetInt(),1, function()
-        print("Speedup turns off")
+    timer.Create("SpeedupTimer_"..activator:AccountID(),GetConVar("cw_speedup_duration"):GetInt(),1, function()
         activator:SetWalkSpeed(DEFAULT_WALKSPEED)
         activator:SetRunSpeed(DEFAULT_RUNSPEED)
     end)
@@ -65,9 +63,8 @@ hook.Add("DoPlayerDeath", "Speedup_Powerup_Death", function(ply)
     ply:SetWalkSpeed(DEFAULT_WALKSPEED)
     ply:SetRunSpeed(DEFAULT_RUNSPEED)
     if timer.Exists("SpeedupTimer_"..ply:AccountID()) then
-        print("Destroying Timer")
         timer.Destroy("SpeedupTimer_"..ply:AccountID())
     end
 end)
 
-CreateConVar("cw_powerupduration", "15", FCVAR_LUA_SERVER, "Set Powerup Duration")
+CreateConVar("cw_speedup_duration", "15", FCVAR_LUA_SERVER, "Set Speed Powerup Duration")
