@@ -69,12 +69,5 @@ hook.Add("DoPlayerDeath", "Speedup_Powerup_Death", function(ply)
         timer.Destroy("SpeedupTimer_"..ply:AccountID())
     end
 end)
- 
-function ENT:Think()
-    -- We don't need to think, we are just a prop after all!
-    if !ENT.PowerupProp then
-        ENT.PowerupProp = 
-    end
-end
- 
+
 CreateConVar("cw_powerupduration", "15", FCVAR_LUA_SERVER, "Set Powerup Duration")
