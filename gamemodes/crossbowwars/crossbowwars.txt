@@ -26,6 +26,16 @@
 			"default"	"1"
 		}
 
+
+		3
+		{
+			"name"		"cw_powerupduration"
+			"text"		"Set Powerup Duration"
+			"help"		"Length of powerup before it gets disabled"
+			"type"		"numeric"
+			"default"	"15"
+		}
+
 	}
 
 }

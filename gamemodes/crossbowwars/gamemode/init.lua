@@ -20,6 +20,7 @@ function ChangeMyTeam( ply, cmd, args )
 	ply:SetTeam( _team );
 	ply:Spawn( );
 end
+concommand.Add( "set_team", ChangeMyTeam );
 
 function GM:PlayerSpawn(ply)
 	if ply:Team()==1 then
@@ -28,4 +29,3 @@ function GM:PlayerSpawn(ply)
 		ply:Spectate(OBS_MODE_CHASE)
 	end
 end
-concommand.Add( "set_team", ChangeMyTeam );
