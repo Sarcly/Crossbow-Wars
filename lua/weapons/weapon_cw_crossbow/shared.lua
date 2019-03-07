@@ -33,25 +33,24 @@ function SWEP:PrimaryAttack()
     info.Attacker = pPlayer;
     //print("ok")
     if ( CLIENT ) then return end
-        local Src = Vector(info.Spread,info.Spread,info.Spread)// || vec3_origin
-        local Dir = info.Dir// + Vector( math.Rand( -Src.x, Src.x ), math.Rand( -Src.y, Src.y ), math.Rand( -Src.y, Src.y ) )
+    local Src = Vector(info.Spread,info.Spread,info.Spread)// || vec3_origin
+    local Dir = info.Dir// + Vector( math.Rand( -Src.x, Src.x ), math.Rand( -Src.y, Src.y ), math.Rand( -Src.y, Src.y ) )
         //if CLIENT then return end
-        local pBolt = ents.Create( "cw_crossbow_bolt" );
-        pBolt:SetPos( info.Src + ( Dir * 32 ) )
-        pBolt:SetAngles( Dir:Angle() );
-        pBolt.m_iDamage = self.Primary.Damage;
-        pBolt.Attacker = self.Owner
-        pBolt:Spawn()
+    local pBolt = ents.Create( "cw_crossbow_bolt" );
+    print("updated")
+    pBolt:SetPos( info.Src + Dir * 30 )
+    pBolt:SetAngles( Dir:Angle() );
+    pBolt.m_iDamage = self.Primary.Damage;
+    pBolt.Attacker = self.Owner
+    pBolt:Spawn()
         
-        pBolt:SetPos( info.Src + ( Dir * pBolt:BoundingRadius() ) );
+    //pBolt:SetPos( info.Src + ( Dir * pBolt:BoundingRadius() * 2) );
 
-        if ( pPlayer:WaterLevel() == 3 ) then
-            pBolt:SetVelocity( Dir * 500 );
-        else
-            print("set vel")
-            pBolt:GetPhysicsObject():AddVelocity( Dir * 3400);
-            print(pBolt:GetVelocity())
-        end
+    if ( pPlayer:WaterLevel() == 3 ) then
+        pBolt:SetVelocity( Dir * 500 );
+    else
+        pBolt:GetPhysicsObject():AddVelocity( Dir * 3400);
+    end
 end
 
 function SWEP:ShootBullet(damage, num_bullets, aimcone)
