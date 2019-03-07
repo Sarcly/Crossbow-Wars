@@ -1,5 +1,5 @@
-AddCSLuaFile( "cl_init.lua" ) -- Make sure clientside
-AddCSLuaFile( "shared.lua" )  -- and shared scripts are sent.
+AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "shared.lua" )
  
 include('shared.lua')
 
@@ -9,18 +9,15 @@ local DEFAULT_RUNSPEED = 360
 function ENT:Initialize()
  
 	self:SetModel( "models/props_junk/wood_crate001a.mdl" )
-	self:PhysicsInit( SOLID_VPHYSICS )      -- Make us work with physics,
-	self:SetMoveType( MOVETYPE_VPHYSICS )   -- after all, gmod is a physics
-	self:SetSolid( SOLID_VPHYSICS )         -- Toolbox
+	self:PhysicsInit( SOLID_VPHYSICS )
+	self:SetMoveType( MOVETYPE_VPHYSICS )
+	self:SetSolid( SOLID_VPHYSICS )
+    self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
     local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
 end
-
---[[ function GM:PostGamemodeLoaded()
-    print("Loaded Powerup")
-end ]]
 
 function ENT:SpawnFunction( ply, tr )
     if !tr.Hit then return end
@@ -30,33 +27,23 @@ function ENT:SpawnFunction( ply, tr )
     e:Activate()
     return e
 end
- 
-function ENT:Use( activator, caller )
-    activator:SetWalkSpeed(500)
-    activator:SetRunSpeed(500)
-    if timer.Exists("SpeedupTimer_"..activator:AccountID()) then
-        timer.Destroy("SpeedupTimer_"..activator:AccountID())
+
+function ENT:Think()
+    local entNear = ents.FindInSphere(self:WorldSpaceCenter(), 50)
+    for index, ent in pairs(entNear) do 
+        if ent:IsPlayer() then 
+            ent:SetWalkSpeed(500)
+            ent:SetRunSpeed(500)
+            if timer.Exists("SpeedupTimer_"..ent:AccountID()) then
+                timer.Destroy("SpeedupTimer_"..ent:AccountID())
+            end
+            timer.Create("SpeedupTimer_"..ent:AccountID(),GetConVar("cw_speedup_duration"):GetInt(),1, function()
+                ent:SetWalkSpeed(DEFAULT_WALKSPEED)
+                ent:SetRunSpeed(DEFAULT_RUNSPEED)
+            end)
+            self:Remove()
+        end
     end
-    timer.Create("SpeedupTimer_"..activator:AccountID(),GetConVar("cw_speedup_duration"):GetInt(),1, function()
-        print("Speedup turns off")
-        activator:SetWalkSpeed(DEFAULT_WALKSPEED)
-        activator:SetRunSpeed(DEFAULT_RUNSPEED)
-    end)
-
-end
-
-function ENT:OnTakeDamage(damage)
-    local activator = damage:GetAttacker()
-    activator:SetWalkSpeed(500)
-    activator:SetRunSpeed(500)
-
-    timer.Create("SpeedupTimer_"..activator:AccountID(),GetConVar("cw_speedup_duration"):GetInt(),1, function()
-        activator:SetWalkSpeed(DEFAULT_WALKSPEED)
-        activator:SetRunSpeed(DEFAULT_RUNSPEED)
-    end)
-    self:PrecacheGibs()
-    self:GibBreakClient(damage:GetDamageForce())
-    self:Remove()
 end
 
 hook.Add("DoPlayerDeath", "Speedup_Powerup_Death", function(ply)

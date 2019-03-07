@@ -2,14 +2,10 @@ include('shared.lua')
 
 function ENT:Draw()
     self:DrawModel()       -- Draw the model.
-    render.SetMaterial()
-	local mins, maxes = self:GetModelBounds()
-    local nx = self:GetPos()[1]+((math.abs(mins[1])+math.abs(maxes[1]))/2)
-    local nz = self:GetPos()[2]+((math.abs(mins[2])+math.abs(maxes[2]))/2)
-    local ny = self:GetPos()[3]+((math.abs(mins[3])+math.abs(maxes[3]))/2)
-    local pos = Vector(nx, nz, ny)
-    print("--")
-    print(self:GetPos())
-    print(pos)
-	render.DrawSphere(pos, 50, 50, 50, Color( 0, 175, 175, 100 ) )
+    if (GetConVar("cw_show_powerup_hitbox"):GetInt()~=0) then
+        render.SetColorMaterial()
+	    render.DrawSphere(self:WorldSpaceCenter(), 50, 50, 50, Color( 175, 0, 0, 100 ) )
+    end
 end
+
+CreateConVar("cw_show_powerup_hitbox", "0", FCVAR_LUA_CLIENT, "Show Hitbox for Powerups")

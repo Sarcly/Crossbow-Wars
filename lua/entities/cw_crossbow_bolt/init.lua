@@ -4,7 +4,7 @@ AddCSLuaFile( "shared.lua" )  -- and shared scripts are sent.
 include('shared.lua')
 
 function ENT:Initialize()
-	self:SetModel( "models/props_junk/harpoon002a.mdl" )
+	self:SetModel( "models/cw_crossbow_bolt/crossbow_bolt.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )      -- Make us work with physics,
 	self:SetMoveType( MOVETYPE_VPHYSICS )   -- after all, gmod is a physics
 	self:SetSolid( SOLID_VPHYSICS )         -- Toolbox
