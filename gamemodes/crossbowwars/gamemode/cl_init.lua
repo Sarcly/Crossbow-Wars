@@ -8,5 +8,3 @@ function GM:Think()
 		teamPanel:Show()
 	end	
 end
-
-

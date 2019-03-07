@@ -15,8 +15,6 @@
 			"type"		"Numeric"
 			"default"	"20"
 		}
-
-
 		2
 		{
 			"name"		"sk_grenades"
@@ -25,15 +23,13 @@
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-
-
-		3
+		2
 		{
-			"name"		"cw_powerupduration"
-			"text"		"Set Powerup Duration"
-			"help"		"Length of powerup before it gets disabled"
-			"type"		"numeric"
-			"default"	"15"
+			"name"		"cw_show_powerup_hitbox"
+			"text"		"Show Powerup Hitboxes"
+			"help"		"Shows the hitbox of the powerups"
+			"type"		"CheckBox"
+			"default"	"0"
 		}
 
 	}

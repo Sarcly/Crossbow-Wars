@@ -8,4 +8,3 @@ DeriveGamemode("base")
 function GM:Initialize()
 	-- Do stuff
 end
-

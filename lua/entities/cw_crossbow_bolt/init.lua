@@ -4,19 +4,19 @@ AddCSLuaFile( "shared.lua" )  -- and shared scripts are sent.
 include('shared.lua')
 
 function ENT:Initialize()
-	self:SetModel( "models/cw_crossbow_bolt/crossbow_bolt.mdl" )
-	self:PhysicsInit( SOLID_VPHYSICS )      -- Make us work with physics,
-	self:SetMoveType( MOVETYPE_VPHYSICS )   -- after all, gmod is a physics
-	self:SetSolid( SOLID_VPHYSICS )         -- Toolbox
+    util.PrecacheModel("models/cw_crossbowbolt/cw_crossbow_bolt.mdl")
+	self:SetModel( "models/cw_crossbowbolt/cw_crossbow_bolt.mdl" )
+    // PrintTable()
+    self:PhysicsInit(SOLID_VPHYSICS)
     self:SetGravity(10)
-    local phys = self:GetPhysicsObject()
+    //local phys = physEnt:GetPhysicsObject()
     if CLIENT then return end
 	if (phys:IsValid()) then
 		phys:Wake()
     end
 end
 
---[[ function ENT:SpawnFunction( ply, tr )
+function ENT:SpawnFunction( ply, tr )
     if !tr.Hit then return end
     local e = ents.Create(ClassName)
     //e:SetOwner(ply)
@@ -24,7 +24,7 @@ end
     e:Spawn()
     e:Activate()
     return e
-end ]]
+end
  
 
 function ENT:PhysicsCollide(collisionData, physObj)
@@ -53,7 +53,7 @@ function ENT:PhysicsCollide(collisionData, physObj)
         if(collisionData.HitEntity:GetClass()=="worldspawn") then
             local vecDir = self:GetVelocity()
             local hitPos = Vector(tr.HitPos[1], tr.HitPos[2], tr.HitPos[3]):GetNormalized()
-
+--[[ 
             local hitDot = hitPos:Dot(vecDir*-1)
             if(hitDot<0.5 && vecDir:Length()>100) then
                 vReflection = 2 * hitPos * hitDot + vecDir
@@ -62,18 +62,18 @@ function ENT:PhysicsCollide(collisionData, physObj)
                 self:SetAbsVelocity(vReflection * vecDir:GetNormalized() * .75)
                 self:SetGravity(1)
             else   
-                self:SetMoveType(MOVETYPE_NONE)
+                //self:SetMoveType(MOVETYPE_NONE)
                 vForward = self:GetAngles():Forward():GetNormalized()
                 effectData = EffectData()
                 effectData:SetOrigin(hitPos)
                 effectData:SetNormal(vForward)
                 util.Effect("BoltImpact",effectData)
-            end
+            end ]]
         
         end
     end
 end
 
-function GM:EntityTakeDamage(target, dmginfo)
+--[[ function GM:EntityTakeDamage(target, dmginfo)
     
-end
+end ]]

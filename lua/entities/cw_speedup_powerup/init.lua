@@ -3,6 +3,7 @@ AddCSLuaFile( "shared.lua" )
  
 include('shared.lua')
 
+local POWERUP_SPEED = GetConVar("cw_speedup_speed"):GetInt()
 local DEFAULT_WALKSPEED = 270
 local DEFAULT_RUNSPEED = 360
 
@@ -32,8 +33,8 @@ function ENT:Think()
     local entNear = ents.FindInSphere(self:WorldSpaceCenter(), 50)
     for index, ent in pairs(entNear) do 
         if ent:IsPlayer() then 
-            ent:SetWalkSpeed(500)
-            ent:SetRunSpeed(500)
+            ent:SetWalkSpeed(POWERUP_SPEED)
+            ent:SetRunSpeed(POWERUP_SPEED)
             if timer.Exists("SpeedupTimer_"..ent:AccountID()) then
                 timer.Destroy("SpeedupTimer_"..ent:AccountID())
             end
@@ -55,3 +56,4 @@ hook.Add("DoPlayerDeath", "Speedup_Powerup_Death", function(ply)
 end)
 
 CreateConVar("cw_speedup_duration", "15", FCVAR_LUA_SERVER, "Set Speed Powerup Duration")
+CreateConVar("cw_speedup_speed", "600", FCVAR_LUA_SERVER, "Set how fast the speed up power up makes you. Normal runspeed is 360")
