@@ -22,35 +22,27 @@ SWEP.AccurateCrosshair = true
 
 
 function SWEP:PrimaryAttack()
-    self:SetNextPrimaryFire( CurTime() + 1 )
+    self:SetNextPrimaryFire( CurTime())
     local pPlayer = self.Owner;
 
     if ( !pPlayer ) then return end 
     local vecSrc = pPlayer:GetShootPos();
     local vecAiming = pPlayer:GetAimVector();
 
-    local info = { Num = 1, Src = vecSrc, Dir = vecAiming, Spread = .01, Damage = 100 };
-    info.Attacker = pPlayer;
+
     //print("ok")
     if ( CLIENT ) then return end
-    local Src = Vector(info.Spread,info.Spread,info.Spread)// || vec3_origin
-    local Dir = info.Dir// + Vector( math.Rand( -Src.x, Src.x ), math.Rand( -Src.y, Src.y ), math.Rand( -Src.y, Src.y ) )
-        //if CLIENT then return end
     local pBolt = ents.Create( "cw_crossbow_bolt" );
-    print("updated")
-    pBolt:SetPos( info.Src + Dir * 30 )
-    pBolt:SetAngles( Dir:Angle() );
+
+    if(!IsValid(pBolt)) then return end
     pBolt.m_iDamage = self.Primary.Damage;
     pBolt.Attacker = self.Owner
     pBolt:Spawn()
-        
-    //pBolt:SetPos( info.Src + ( Dir * pBolt:BoundingRadius() * 2) );
-
-    if ( pPlayer:WaterLevel() == 3 ) then
-        pBolt:SetVelocity( Dir * 500 );
-    else
-        pBolt:GetPhysicsObject():AddVelocity( Dir * 3400);
-    end
+    pBolt:SetPos( self.Owner:EyePos() + self.Owner:GetAimVector():GetNormalized() * 30 )
+    pBolt:SetOwner(self.Owner)
+    shootVector = self.Owner:GetVelocity() + self.Owner:GetAimVector() * 3200
+    pBolt:SetAngles(self.Owner:GetAimVector():Angle())
+    pBolt:GetPhysicsObject():SetVelocity(shootVector)
 end
 
 function SWEP:ShootBullet(damage, num_bullets, aimcone)
