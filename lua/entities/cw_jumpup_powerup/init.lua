@@ -3,6 +3,8 @@ AddCSLuaFile( "shared.lua" )
  
 include('shared.lua')
 
+CreateConVar("cw_jumpup_duration", "15", FCVAR_LUA_SERVER, "Set Jump Powerup Duration")
+
 function ENT:Initialize()
 	self:SetModel( "models/props_c17/oildrum001.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
@@ -29,10 +31,10 @@ function ENT:Think()
     for index, ent in pairs(entNear) do 
         if ent:IsPlayer() then 
             ent:SetJumpPower(320)
-            if timer.Exists("JumpupTimer_"..ent:AccountID()) then
-                timer.Destroy("JumpupTimer_"..ent:AccountID())
+            if timer.Exists("JumpupTimer_"..ent:UserID()) then
+                timer.Destroy("JumpupTimer_"..ent:UserID())
             end
-            timer.Create("JumpupTimer_"..ent:AccountID(),GetConVar("cw_jumpup_duration"):GetInt(),1, function()
+            timer.Create("JumpupTimer_"..ent:UserID(),GetConVar("cw_jumpup_duration"):GetInt(),1, function()
                 ent:SetJumpPower(180)
             end)
             self:Remove()
@@ -42,9 +44,9 @@ end
 
 hook.Add("DoPlayerDeath", "Jumpup_Powerup_Death", function(ply)
     ply:SetJumpPower(180)
-    if timer.Exists("JumpupTimer_"..ply:AccountID()) then
-        timer.Destroy("JumpupTimer_"..ply:AccountID())
+    print(ply:UserID())
+    print("BRUG FUCG")
+    if timer.Exists("JumpupTimer_"..ply:UserID()) then
+        timer.Destroy("JumpupTimer_"..ply:UserID())
     end
 end)
-
-CreateConVar("cw_jumpup_duration", "15", FCVAR_LUA_SERVER, "Set Jump Powerup Duration")
