@@ -19,32 +19,6 @@ SWEP.Secondary = {Ammo="none"}
 
 SWEP.AccurateCrosshair = true
 
-
-
--- function SWEP:PrimaryAttack()
---     self:SetNextPrimaryFire( CurTime())
---     local pPlayer = self.Owner;
-
---     if ( !pPlayer ) then return end 
---     local vecSrc = pPlayer:GetShootPos();
---     local vecAiming = pPlayer:GetAimVector();
-
-
---     //print("ok")
---     if ( CLIENT ) then return end
---     local pBolt = ents.Create( "cw_crossbow_bolt" );
-
---     if(!IsValid(pBolt)) then return end
---     pBolt.m_iDamage = self.Primary.Damage;
---     pBolt.Attacker = self.Owner
---     pBolt:Spawn()
---     pBolt:SetPos( self.Owner:EyePos() + self.Owner:GetAimVector():GetNormalized() * 30 )
---     pBolt:SetOwner(self.Owner)
---     shootVector = self.Owner:GetVelocity() + self.Owner:GetAimVector() * 3200
---     pBolt:SetAngles(self.Owner:GetAimVector():Angle())
---     pBolt:GetPhysicsObject():SetVelocity(shootVector)
--- end
-
 function SWEP:PrimaryAttack()
     if !(self.Weapon:GetNextPrimaryFire() < CurTime()) then return end
     self.Owner:EmitSound("Weapon_Crossbow.BoltFly")
@@ -78,11 +52,6 @@ function SWEP:PrimaryAttack()
 	bolt.IsScripted = true
 end
 
-function SWEP:ShootBullet(damage, num_bullets, aimcone)
- // Only the player fires this way so we can cast
-    
-end
-
 function SWEP:SecondaryAttack()
     if !(self.Weapon:GetNextPrimaryFire() < CurTime()) then return end
     self.Weapon:SetNextPrimaryFire(CurTime() + 0.6)
@@ -94,9 +63,3 @@ function SWEP:SecondaryAttack()
         self:SetNetworkedBool( "Ironsights", false )
     end
 end
-
---[[ function SWEP:Reload()
-    print("reload")
-    self.Weapon:DefaultReload(ACT_VM_RELOAD)
-    return true
-end ]]
