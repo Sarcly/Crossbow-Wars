@@ -10,12 +10,9 @@ function GM:CreateTeams()
 end
 
 function GM:PlayerSpawn( ply )
-	//PrintMessage(4, "Knot my thrussy pwease")
 end
 
 function ChangeMyTeam( ply, cmd, args )
-	// _team is set to the first argument converted to a number, if an argument has been provided, or it is set to 0 as a default value.
-	// local _team =              && tonumber( args[ 1 ] )     ,                args[ 1 ]         ,              || 0
 	local _team = args[ 1 ] && tonumber( args[ 1 ] ) || 0;
 	ply:SetTeam( _team );
 	ply:Spawn( );

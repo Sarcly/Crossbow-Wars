@@ -1,4 +1,4 @@
-SWEP.PrintName = "Crossbow War Crossbow"
+SWEP.PrintName = "Crossbow Wars Crossbow"
 SWEP.Category = "Crossbow Wars"
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
@@ -21,14 +21,14 @@ SWEP.AccurateCrosshair = true
 
 function SWEP:PrimaryAttack()
     if !(self.Weapon:GetNextPrimaryFire() < CurTime()) then return end
-    self.Owner:EmitSound("Weapon_Crossbow.BoltFly")
-    self.Owner:EmitSound(Sound("weapons/crossbow/fire1.wav"))
+    local ply = self.Owner
+    ply:EmitSound("Weapon_Crossbow.BoltFly")
+    ply:EmitSound(Sound("weapons/crossbow/fire1.wav"))
     self.Weapon:SetNextPrimaryFire(CurTime() + 2.4)
     self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    self.Owner:MuzzleFlash()							
-    self.Owner:SetAnimation( PLAYER_ATTACK1 )
-    self.Owner:ViewPunch(Angle(-2,0,0))
-    local ply = self.Owner
+    ply:MuzzleFlash()							
+    ply:SetAnimation( PLAYER_ATTACK1 )
+    ply:ViewPunch(Angle(-2,0,0))
     local selfclass = self:GetClass()
     timer.Simple( 0.6, 
         function() 
@@ -43,23 +43,21 @@ function SWEP:PrimaryAttack()
                 end 
             end)
 	local bolt = ents.Create("crossbow_bolt")
-	bolt:SetOwner(self.Owner)
-	bolt:SetPos(self.Owner:GetShootPos())
-	bolt:SetAngles(self.Owner:EyeAngles())
+	bolt:SetOwner(ply)
+	bolt:SetPos(ply:GetShootPos())
+	bolt:SetAngles(ply:EyeAngles())
 	bolt:Spawn()
 	bolt:Activate()
-	bolt:SetVelocity(self.Owner:GetAimVector()*3000)
+	bolt:SetVelocity(ply:GetAimVector()*3000)
 	bolt.IsScripted = true
 end
 
 function SWEP:SecondaryAttack()
-    if !(self.Weapon:GetNextPrimaryFire() < CurTime()) then return end
-    self.Weapon:SetNextPrimaryFire(CurTime() + 0.6)
-    if !self:GetNetworkedBool( "Ironsights" ) then
-        self:SetNetworkedBool( "Ironsights", true )
-        self.Owner:SetFOV( 55, 0.1 )
+    if !(self:GetNetworkedBool("zoomed")) then
+        self:SetNetworkedBool("zoomed", true)
+        self.Owner:SetFOV( 20, 0.1 )
     else
         self.Owner:SetFOV( 0, 0.1 )
-        self:SetNetworkedBool( "Ironsights", false )
+        self:SetNetworkedBool("zoomed", false)
     end
 end

@@ -44,8 +44,6 @@ end
 
 hook.Add("DoPlayerDeath", "Jumpup_Powerup_Death", function(ply)
     ply:SetJumpPower(180)
-    print(ply:UserID())
-    print("BRUG FUCG")
     if timer.Exists("JumpupTimer_"..ply:UserID()) then
         timer.Destroy("JumpupTimer_"..ply:UserID())
     end
