@@ -66,8 +66,7 @@ function SWEP:PrimaryAttack()
     ply:MuzzleFlash()							
     ply:SetAnimation( PLAYER_ATTACK1 )
     ply:ViewPunch(Angle(-2,0,0))
-    local selfclass = self:GetClass()
-	local bolt = ents.Create("crossbow_bolt")
+    local bolt = ents.Create("crossbow_bolt")
 	bolt:SetOwner(ply)
 	bolt:SetPos(ply:GetShootPos())
 	bolt:SetAngles(ply:EyeAngles())
@@ -92,9 +91,9 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Reload()
+    if (self:GetNetworkedBool("cwreloading")) then return end 
     if (self:Ammo1()<=0) then return end
     if !(self.Weapon:Clip1()==0) then return end
-    if (self:GetNetworkedBool("cwreloading")) then return end 
     self:SetNetworkedBool("cwreloading",true)
     self.Owner:GetActiveWeapon():SendWeaponAnim( ACT_VM_RELOAD ) 
     timer.Simple(1, 
