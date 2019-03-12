@@ -50,9 +50,6 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
-    print("===")
-    print(self:Ammo1())
-    print(self:Clip1())
     if !(self.Weapon:GetNextPrimaryFire() < CurTime()) then return end
     if (self:GetNetworkedBool("cwreloading")) then return end
     if (self:Ammo1()<=0 and self:Clip1()<=0) then return end
