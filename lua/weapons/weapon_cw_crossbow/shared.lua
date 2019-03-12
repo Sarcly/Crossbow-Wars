@@ -70,7 +70,7 @@ function SWEP:PrimaryAttack()
 	bolt:SetAngles(ply:EyeAngles())
 	bolt:Spawn()
 	bolt:Activate()
-	bolt:SetVelocity(ply:GetAimVector()*3000)
+	bolt:SetVelocity(ply:GetAimVector()*3475)
 	bolt.IsScripted = true
     timer.Simple(.25, 
         function()
