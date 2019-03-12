@@ -50,7 +50,6 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
-    print(self.Weapon:Clip1())
     if !(self.Weapon:GetNextPrimaryFire() < CurTime()) then return end
     if (self:Ammo1()<=0) then return end
     if (self:Clip1()<=0) then return end
