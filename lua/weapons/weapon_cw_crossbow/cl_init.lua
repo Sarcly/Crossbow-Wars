@@ -6,3 +6,7 @@ SWEP.SlotPos = 3
 SWEP.DrawCrosshair = true
 
 SWEP.Author = "Sarcly and Intox"
+
+function SWEP:ViewModelDrawn(vmodel)
+    --must drawn in heated bolt here
+end
