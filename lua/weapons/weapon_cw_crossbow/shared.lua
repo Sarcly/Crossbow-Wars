@@ -71,7 +71,7 @@ function SWEP:PrimaryAttack()
         local bolt = ents.Create("crossbow_bolt")
         local baseVector = ply:GetAimVector():GetNormalized()
         local altered = ply:EyeAngles()
-        altered:RotateAroundAxis(Vector(0,0,1),i*25)
+        altered:RotateAroundAxis(Vector(0,0,1),i*20)
         local alteredVec = altered:Forward()
         bolt:SetOwner(self.Owner)
         bolt:SetPos(self.Owner:GetShootPos()+alteredVec*10)
@@ -80,8 +80,6 @@ function SWEP:PrimaryAttack()
         bolt:Activate()
         bolt:SetVelocity(alteredVec*3475)
         bolt.IsScripted = true
-        print("=================")
-        print(bolt:GetPos())
 	end
     timer.Simple(.15, 
         function()
