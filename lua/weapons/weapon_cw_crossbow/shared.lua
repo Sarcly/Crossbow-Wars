@@ -66,17 +66,28 @@ function SWEP:PrimaryAttack()
     ply:MuzzleFlash()							
     ply:SetAnimation( PLAYER_ATTACK1 )
     ply:ViewPunch(Angle(-2,0,0))
-    local bolt = ents.Create("crossbow_bolt")
-	bolt:SetOwner(ply)
-	bolt:SetPos(ply:GetShootPos())
-	bolt:SetAngles(ply:EyeAngles())
-	bolt:Spawn()
-	bolt:Activate()
-	bolt:SetVelocity(ply:GetAimVector()*3475)
-	bolt.IsScripted = true
-    timer.Simple(.25, 
+    if CLIENT then return end
+    for i=-1,1 do
+        local bolt = ents.Create("crossbow_bolt")
+        local baseVector = ply:GetAimVector():GetNormalized()
+        local altered = ply:EyeAngles()
+        altered:RotateAroundAxis(Vector(0,0,1),i*25)
+        local alteredVec = altered:Forward()
+        bolt:SetOwner(self.Owner)
+        bolt:SetPos(self.Owner:GetShootPos()+alteredVec*10)
+        bolt:SetAngles(altered)
+        bolt:Spawn()
+        bolt:Activate()
+        bolt:SetVelocity(alteredVec*3475)
+        bolt.IsScripted = true
+        print("=================")
+        print(bolt:GetPos())
+	end
+    timer.Simple(.15, 
         function()
-            self:Reload()
+            if(IsValid(self)) then
+                self:Reload()
+            end
         end)
 end
 
@@ -98,6 +109,7 @@ function SWEP:Reload()
     self.Owner:GetActiveWeapon():SendWeaponAnim( ACT_VM_RELOAD ) 
     timer.Simple(1, 
         function() 
+            if(!IsValid(self)) then return end
             self.Owner:EmitSound("Weapon_Crossbow.BoltElectrify")
             self.Owner:RemoveAmmo(1, self.Weapon:GetPrimaryAmmoType())
             self.Weapon:SetClip1(1)
