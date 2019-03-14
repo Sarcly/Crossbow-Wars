@@ -4,3 +4,4 @@
 
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
+

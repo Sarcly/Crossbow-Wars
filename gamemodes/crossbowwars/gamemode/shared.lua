@@ -3,7 +3,7 @@ GM.Author = "Sarcly & Intox"
 GM.Email = "N/A"
 GM.Website = "N/A"
 
-DeriveGamemode("base")
+DeriveGamemode("sandbox")
 
 function GM:Initialize()
 end
