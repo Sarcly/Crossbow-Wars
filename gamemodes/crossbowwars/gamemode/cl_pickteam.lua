@@ -13,7 +13,7 @@ function PANEL:Init()
         self:Hide()
     end
     PANEL.ButtonOne = vgui.Create("DButton", self)
-    PANEL.ButtonOne:SetText("FUCK")
+    PANEL.ButtonOne:SetText("Players")
     PANEL.ButtonOne:Dock(LEFT)
     PANEL.ButtonOne.DoClick = function()
         LocalPlayer():ConCommand("set_team 1")

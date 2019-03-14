@@ -29,7 +29,7 @@ end
 function GM:KeyPress(ply, key)
 	if(key==IN_RELOAD) then
 		if(ply.Powerup) then
-			ply.Powerup.powerup()
+			ply.Powerup.powerup(ply)
 			ply.Powerup = nil
 		else
 			print("no powerup")

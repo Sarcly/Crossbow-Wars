@@ -67,20 +67,32 @@ function SWEP:PrimaryAttack()
     ply:SetAnimation( PLAYER_ATTACK1 )
     ply:ViewPunch(Angle(-2,0,0))
     if CLIENT then return end
-    for i=-1,1 do
+    if(self.Owner.Multishot) then
+        for i=-1,1 do
+            local bolt = ents.Create("crossbow_bolt")
+            local baseVector = ply:GetAimVector():GetNormalized()
+            local altered = ply:EyeAngles()
+            altered:RotateAroundAxis(Vector(0,0,1),i*20)
+            local alteredVec = altered:Forward()
+            bolt:SetOwner(self.Owner)
+            bolt:SetPos(self.Owner:GetShootPos()+alteredVec*10)
+            bolt:SetAngles(altered)
+            bolt:Spawn()
+            bolt:Activate()
+            bolt:SetVelocity(alteredVec*3475)
+            bolt.IsScripted = true
+        end
+    else
         local bolt = ents.Create("crossbow_bolt")
         local baseVector = ply:GetAimVector():GetNormalized()
-        local altered = ply:EyeAngles()
-        altered:RotateAroundAxis(Vector(0,0,1),i*20)
-        local alteredVec = altered:Forward()
         bolt:SetOwner(self.Owner)
-        bolt:SetPos(self.Owner:GetShootPos()+alteredVec*10)
-        bolt:SetAngles(altered)
+        bolt:SetPos(self.Owner:GetShootPos())
+        bolt:SetAngles(self:EyeAngles())
         bolt:Spawn()
         bolt:Activate()
-        bolt:SetVelocity(alteredVec*3475)
+        bolt:SetVelocity(baseVector*3475)
         bolt.IsScripted = true
-	end
+    end
     timer.Simple(.15, 
         function()
             if(IsValid(self)) then
