@@ -16,6 +16,23 @@
 			"default"	"0"
 		}
 
+		2
+		{
+			"name"		"cw_jump_powerup_duration"
+			"text"		"Jump Powerup Duration"
+			"help"		"Sets the duration of the jump powerup"
+			"type"		"Numeric"
+			"default"	"15"
+		}
+		
+		3
+		{
+			"name"		"cw_show_powerup_hitbox"
+			"text"		"Show Powerup Hitboxes"
+			"help"		"Shows the hitbox of the powerups"
+			"type"		"CheckBox"
+			"default"	"1"
+		}
 	}
 
 }

@@ -1,11 +1,10 @@
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile("cl_pickteam.lua")
-
+AddCSLuaFile("drawarc.lua")
 include("shared.lua")
 
-local interval = .01
-local intinv = 1/interval
+
 
 function GM:CreateTeams()
     team.SetUp(1,"Fighters", Color(255,0,0))
@@ -20,6 +19,8 @@ end
 concommand.Add( "set_team", ChangeMyTeam );
 
 function GM:PlayerSpawn(ply)
+	ply:SetWalkSpeed(GetConVar("cw_walkspeed"):GetInt() or 270)
+	ply:SetRunSpeed(GetConVar("cw_runspeed"):GetInt() or 360)
 	if ply:Team()==1 then
 		ply:UnSpectate()
 		ply:Give("weapon_cw_crossbow")
@@ -30,26 +31,29 @@ function GM:PlayerSpawn(ply)
 end
 
 function GM:KeyPress(ply, key)
-	print(ply.PoweredUp)
 	if(key==IN_RELOAD) then
 		if(ply.Powerup) then
+			PrintTable(ply.Powerup)
 			ply.PoweredUp = true
-			ply:SendLua("LocalPlayer().PowereupFraction="..ply.PowerupFraction)
-			ply:SendLua("LocalPlayer().PoweredUp=true")
+			ply:SetNWFloat("PowerupFraction", 0)
+			ply:SetNWBool("PoweredUp", true)
 			ply.Powerup:Powerup(ply)
 			ply.PowerupIntervalCount = 0
 			ply.PowerupFraction = 0
-			ply.LastPowerup = ply.Powerup
-			timer.Create("PowerupDurationUpdater_"..ply:UserID(),interval,ply.LastPowerup.duration*intinv,function()
-				print(ply.PowerupFraction)
-				local pu = ply.LastPowerup
+			local powerup = ply.Powerup
+			local duration = GetConVar(powerup.duration):GetInt()
+			print("DURATION:"..duration)
+			timer.Create("PowerupDurationUpdater_"..ply:UserID(),interval,duration*intinv,function()
+				print("fraction:"..ply.PowerupFraction)
+				print("intervalcount:"..ply.PowerupIntervalCount)
 				ply.PowerupIntervalCount = ply.PowerupIntervalCount + 1
-				ply.PowerupFraction = ply.PowerupIntervalCount/(pu.duration*intinv)
-				ply:SendLua("LocalPlayer().PowerupFraction="..ply.PowerupFraction)
+				ply.PowerupFraction = ply.PowerupIntervalCount/(duration*intinv)
+				ply:SetNWFloat("PowerupFraction", ply.PowerupFraction)
 			end)
-			timer.Create("PowerupStatus_"..ply:UserID(),ply.LastPowerup.duration,1,function()
+			timer.Create("PowerupStatus_"..ply:UserID(),duration,1,function()
 				ply.PoweredUp = false
-				ply:SendLua("LocalPlayer().PoweredUp=false")
+				ply:SetNWFloat("PowerupFraction", 0)
+				ply:SetNWBool("PoweredUp", false)
 			end)
 			ply.Powerup = nil
 		else
