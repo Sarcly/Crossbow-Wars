@@ -10,49 +10,53 @@ CreateConVar("cw_multishot_powerup_duration", "30", FCVAR_LUA_SERVER, "How long 
 local DEFAULT_WALKSPEED = 270
 local DEFAULT_RUNSPEED = 360
 
-
 local powerup_table = {}
 
 local speed_powerup = {
-    powerup = function(ent)
-        ent:SetWalkSpeed(GetConVar("cw_speed_powerup_speed"):GetInt())
-            ent:SetRunSpeed(GetConVar("cw_speed_powerup_speed"):GetInt())
-            if timer.Exists("PowerupTimer_"..ent:UserID()) then
-                timer.Destroy("PowerupTimer_"..ent:UserID())
-            end
-            timer.Create("PowerupTimer_"..ent:UserID(),GetConVar("cw_speed_powerup_duration"):GetInt(),1, function()
-                ent:SetWalkSpeed(DEFAULT_WALKSPEED)
-                ent:SetRunSpeed(DEFAULT_RUNSPEED)
-            end)
-    end,
+    duration=GetConVar("cw_speed_powerup_duration"):GetInt(),
     name="Speed Powerup"
 }
+function speed_powerup:Powerup(ent)
+    ent:SetWalkSpeed(GetConVar("cw_speed_powerup_speed"):GetInt())
+    ent:SetRunSpeed(GetConVar("cw_speed_powerup_speed"):GetInt())
+    if timer.Exists("PowerupTimer_"..ent:UserID()) then
+        timer.Remove("PowerupTimer_"..ent:UserID())
+    end
+    timer.Create("PowerupTimer_"..ent:UserID(),self.duration,1, function()
+        ent:SetWalkSpeed(DEFAULT_WALKSPEED)
+        ent:SetRunSpeed(DEFAULT_RUNSPEED)
+    end)
+end
 
 local multishot_powerup = {
-    powerup = function(ent)
-        ent.Multishot = true
-        if timer.Exists("PowerupTimer_"..ent:UserID()) then
-            timer.Destroy("PowerupTimer_"..ent:UserID())
-        end
-        timer.Create("PowerupTimer_"..ent:UserID(),GetConVar("cw_multishot_powerup_duration"):GetInt(),1, function()
-            ent.Multishot = false
-        end)
-    end,
+    duration=GetConVar("cw_multishot_powerup_duration"):GetInt(),
     name="Multishot Powerup"
 }
 
+function multishot_powerup:Powerup(ent)
+    ent.Multishot = true
+    if timer.Exists("PowerupTimer_"..ent:UserID()) then
+        timer.Remove("PowerupTimer_"..ent:UserID())
+    end
+    timer.Create("PowerupTimer_"..ent:UserID(),self.duration,1, function()
+        ent.Multishot = false
+    end)
+end
+
 local jump_powerup = {
-    powerup = function(ent)
-         ent:SetJumpPower(320)
-            if timer.Exists("PowerupTimer_"..ent:UserID()) then
-                timer.Destroy("PowerupTimer_"..ent:UserID())
-            end
-            timer.Create("PowerupTimer_"..ent:UserID(),GetConVar("cw_jump_powerup_duration"):GetInt(),1, function()
-                ent:SetJumpPower(180)
-            end)
-    end,
+    duration=GetConVar("cw_jump_powerup_duration"):GetInt(),
     name="Jump Powerup"
 }
+
+function jump_powerup:Powerup(ent)
+    ent:SetJumpPower(320)
+    if timer.Exists("PowerupTimer_"..ent:UserID()) then
+        timer.Remove("PowerupTimer_"..ent:UserID())
+    end
+    timer.Create("PowerupTimer_"..ent:UserID(),self.duration,1, function()
+        ent:SetJumpPower(180)
+    end)
+end
 
 powerup_table[#powerup_table+1]=speed_powerup
 powerup_table[#powerup_table+1]=multishot_powerup
@@ -79,13 +83,13 @@ function ENT:SpawnFunction( ply, tr )
     return e
 end
 
+
+
 function ENT:Think()
     local entNear = ents.FindInSphere(self:WorldSpaceCenter(), 50)
     for index, ent in pairs(entNear) do 
-        if ent:IsPlayer() then
-            --Give Powerup Here
+        if ent:IsPlayer() && !ent.Powerup && !timer.Exists("PowerupTimer_"..ent:UserID())  then
             local powerup_index = math.random(#powerup_table)
-            print(powerup_index)
             ent:ChatPrint("Picked up "..powerup_table[powerup_index].name)
             ent.Powerup = powerup_table[powerup_index]
             self:Remove()
