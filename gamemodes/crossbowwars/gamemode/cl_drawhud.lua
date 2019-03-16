@@ -10,21 +10,24 @@ hook.Add( "HUDShouldDraw", "HideHUD", function(name)
 	if (hide[name]) then return false end
 end)
 
-
-local pos = {x=100,y=100}
+local padding = 100
 local width = {x=100,y=100}
+local pos = {x=0,y=ScrH()-width.y}
 local PANEL = {}
+local fontsize = 10
+
 
 function PANEL:Init()
     self:SetSize(width.x,width.y)
+    self:SetPos(pos.x,pos.y)
     self:ParentToHUD()
     self.HealthLabel = vgui.Create("DLabel", PANEL)
     self.PowerupLabel = vgui.Create("DLabel", PANEL)
-    self.PowerupLabel:SetPos(pos.x, pos.y+10)
+    self.PowerupLabel:SetPos(10, 20)
     self.PowerupLabel:SetWidth(100)
     self.TimeLeft = vgui.Create("DLabel", PANEL)
-    self.TimeLeft:SetPos(pos.x,pos.y+20)
-    self.HealthLabel:SetPos(pos.x,pos.y)
+    self.TimeLeft:SetPos(10, 10)
+    self.HealthLabel:SetPos(10,30)
 end
 
 function PANEL:Paint(w,h)
@@ -39,7 +42,6 @@ function PANEL:Paint(w,h)
             self.TimeLeft:SetText(LocalPlayer():GetNWInt("PowerupDuration")-LocalPlayer():GetNWInt("PowerupDuration")*LocalPlayer():GetNWFloat("PowerupFraction"))
         else
             self.TimeLeft:SetText("")
-            print(self.TimeLeft:GetText())
         end
     else
         print(LocalPlayer())
@@ -47,4 +49,4 @@ function PANEL:Paint(w,h)
 
 end
 
-vgui.Register( "HudPanel", PANEL, "DFrame" ) 
+vgui.Register( "HudPanel", PANEL, "DPanel" ) 

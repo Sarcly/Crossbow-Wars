@@ -105,20 +105,20 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-    if !(self:GetNetworkedBool("cwzoomed")) then
-        self:SetNetworkedBool("cwzoomed", true)
+    if !(self:GetNWBool("cwzoomed")) then
+        self:SetNWBool("cwzoomed", true)
         self.Owner:SetFOV( 20, 0.1 )
     else
         self.Owner:SetFOV( 0, 0.1 )
-        self:SetNetworkedBool("cwzoomed", false)
+        self:SetNWBool("cwzoomed", false)
     end
 end
 
 function SWEP:Reload()
-    if (self:GetNetworkedBool("cwreloading")) then return end 
+    if (self:GetNWBool("cwreloading")) then return end 
     if (self:Ammo1()<=0) then return end
     if !(self.Weapon:Clip1()==0) then return end
-    self:SetNetworkedBool("cwreloading",true)
+    self:SetNWBool("cwreloading",true)
     self.Owner:GetActiveWeapon():SendWeaponAnim( ACT_VM_RELOAD ) 
     timer.Simple(1, 
         function() 
@@ -128,7 +128,7 @@ function SWEP:Reload()
             self.Weapon:SetClip1(1)
             timer.Simple(1, 
                 function() 
-                    self:SetNetworkedBool("cwreloading",false)
+                    self:SetNWBool("cwreloading",false)
                 end)
         end)
 end

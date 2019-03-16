@@ -5,10 +5,12 @@ include('shared.lua')
 
 CreateConVar("cw_jump_powerup_duration", "15", FCVAR_LUA_SERVER, "Set Jump Powerup Duration")
 CreateConVar("cw_speed_powerup_duration", "15", FCVAR_LUA_SERVER, "Set Speed Powerup Duration")
-CreateConVar("cw_speed_powerup_speed", "600", FCVAR_LUA_SERVER, "Set how fast the speed up power up makes you. Normal runspeed is 360")
+CreateConVar("cw_speed_powerup_speed", "600", FCVAR_LUA_SERVER, "Set how fast the speed up power up makes you")
 CreateConVar("cw_multishot_powerup_duration", "30", FCVAR_LUA_SERVER, "How long the multishot powerup lasts")
 CreateConVar("cw_walkspeed", "270", FCVAR_LUA_SERVER, "Set how fast the player walks without powerups")
 CreateConVar("cw_runspeed", "360", FCVAR_LUA_SERVER, "Set how fast the player runs without powerups")
+CreateConVar("cw_jumpheight", "180", FCVAR_LUA_SERVER, "Set how high the player jumps without powerups")
+CreateConVar("cw_jump_powerup_height", "320", FCVAR_LUA_SERVER, "Set how high the player jumps with the jump powerup")
 
 local powerup_table = {}
 
@@ -49,18 +51,28 @@ local jump_powerup = {
 }
 
 function jump_powerup:Powerup(ent)
-    ent:SetJumpPower(320)
+    ent:SetJumpPower(GetConVar("cw_jump_powerup_height"):GetInt())
     if timer.Exists("PowerupTimer_"..ent:UserID()) then
         timer.Remove("PowerupTimer_"..ent:UserID())
     end
     timer.Create("PowerupTimer_"..ent:UserID(),GetConVar(self.duration):GetInt(),1, function()
-        ent:SetJumpPower(180)
+        ent:SetJumpPower(GetConVar("cw_jumpheight"):GetInt())
     end)
+end
+
+local shield_powerup = {
+    duration=0,
+    name="Shield Powerup"
+}
+
+function  shield_powerup:Powerup(ent)
+    ent:SetNWBool("cwshield", true)
 end
 
 powerup_table[#powerup_table+1]=speed_powerup
 powerup_table[#powerup_table+1]=multishot_powerup
 powerup_table[#powerup_table+1]=jump_powerup
+powerup_table[#powerup_table+1]=shield_powerup
 
 function ENT:Initialize()
 	self:SetModel( "models/props_junk/wood_crate001a.mdl" )

@@ -49,26 +49,33 @@ function GM:KeyPress(ply, key)
 	if(key==IN_RELOAD) then
 		if(ply.Powerup) then
 			local powerup = ply.Powerup
-			local duration = GetConVar(powerup.duration):GetInt()
-			ply.PoweredUp = true
-			ply:SetNWFloat("PowerupFraction", 0)
-			ply:SetNWBool("PoweredUp", true)
-			ply:SetNWInt("PowerupDuration", duration)
-			ply.Powerup:Powerup(ply)
-			ply.PowerupIntervalCount = 0
-			ply.PowerupFraction = 0
-			timer.Create("PowerupDurationUpdater_"..ply:UserID(),interval,duration*intinv,function()
-				ply.PowerupIntervalCount = ply.PowerupIntervalCount + 1
-				ply.PowerupFraction = ply.PowerupIntervalCount/(duration*intinv)
-				ply:SetNWFloat("PowerupFraction", ply.PowerupFraction)
-			end)
-			timer.Create("PowerupStatus_"..ply:UserID(),duration,1,function()
-				ply.PoweredUp = false
+			local duration = 0
+			if(powerup.duration != 0) then
+				duration = GetConVar(powerup.duration):GetInt()
+			end
+			if(duration!=0)then
+				ply.PoweredUp = true
 				ply:SetNWFloat("PowerupFraction", 0)
-				ply:SetNWBool("PoweredUp", false)
-				ply:SetNWString("PowerupName","")
-			end)
-			ply.Powerup = nil
+				ply:SetNWBool("PoweredUp", true)
+				ply.Powerup:Powerup(ply)
+				ply.PowerupIntervalCount = 0
+				ply.PowerupFraction = 0
+				timer.Create("PowerupDurationUpdater_"..ply:UserID(),interval,duration*intinv,function()
+					ply.PowerupIntervalCount = ply.PowerupIntervalCount + 1
+					ply.PowerupFraction = ply.PowerupIntervalCount/(duration*intinv)
+					ply:SetNWFloat("PowerupFraction", ply.PowerupFraction)
+				end)
+				timer.Create("PowerupStatus_"..ply:UserID(),duration,1,function()
+					ply.PoweredUp = false
+					ply:SetNWFloat("PowerupFraction", 0)
+					ply:SetNWBool("PoweredUp", false)
+					ply:SetNWString("PowerupName","")
+				end)
+				ply.Powerup = nil
+			else
+				ply.Powerup:Powerup(ply)
+				ply.Powerup = nil
+			end
 		end
 	end
 end
