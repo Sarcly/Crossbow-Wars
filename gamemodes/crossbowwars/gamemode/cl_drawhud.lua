@@ -1,9 +1,9 @@
 
 local hide = {
-	["CHudHealth"] = false,
+	["CHudHealth"] = true,
 	["CHudBattery"] = true,
     ["CHudAmmo"] = true,
-    ["CHudWeaponSelection"] = false
+    ["CHudWeaponSelection"] = true
 }
 
 hook.Add( "HUDShouldDraw", "HideHUD", function(name)
@@ -28,10 +28,9 @@ function PANEL:Init()
 end
 
 function PANEL:Paint(w,h)
-    
     if(IsValid(LocalPlayer())) then
         self.HealthLabel:SetText(LocalPlayer():Health())
-        if(LocalPlayer():GetNWString("PowerupName")) then
+        if(LocalPlayer():GetNWString("PowerupName")!="") then
             self.PowerupLabel:SetText(LocalPlayer():GetNWString("PowerupName"))
         else
             self.PowerupLabel:SetText("None")
@@ -40,6 +39,7 @@ function PANEL:Paint(w,h)
             self.TimeLeft:SetText(LocalPlayer():GetNWInt("PowerupDuration")-LocalPlayer():GetNWInt("PowerupDuration")*LocalPlayer():GetNWFloat("PowerupFraction"))
         else
             self.TimeLeft:SetText("")
+            print(self.TimeLeft:GetText())
         end
     else
         print(LocalPlayer())
@@ -47,4 +47,4 @@ function PANEL:Paint(w,h)
 
 end
 
-vgui.Register( "HudPanel", PANEL, "DPanel" ) 
+vgui.Register( "HudPanel", PANEL, "DFrame" ) 

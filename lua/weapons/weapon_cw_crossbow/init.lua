@@ -9,12 +9,10 @@ hook.Add("EntityTakeDamage", "crossbowbolt_dmg",
     function(ent, dmg)
         if !ent:IsPlayer() then return end
         local inf = dmg:GetInflictor()
-	    if IsValid(inf) --[[ and inf:GetClass() == "crossbow_bolt" ]] then
+	    if IsValid(inf) and inf:GetClass() == "crossbow_bolt" then
             if (!ent:GetNetworkedBool("cwshield")) then
                 ent:Kill()
-                print(inf:GetVelocity())
-                print(ent:GetRagdollEntity())
-                ent.ragdoll:GetPhysicsObject():ApplyForceCenter(inf:GetVelocity())
+                ent.Ragdoll:GetPhysicsObject():AddVelocity(inf:GetVelocity()*2)
             else
                 ent:SetNetworkedBool("cwshield", false)
             end

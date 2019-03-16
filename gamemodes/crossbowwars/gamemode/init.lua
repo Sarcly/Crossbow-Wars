@@ -11,16 +11,16 @@ function GM:CreateTeams()
 	team.SetUp(2,"Spectators",Color(150,150,150))
 end
 
-function ChangeMyTeam( ply, cmd, args )
-	local _team = args[ 1 ] && tonumber( args[ 1 ] ) || 0;
-	ply:SetTeam( _team );
-	ply:Spawn( );
+function ChangeMyTeam(ply, cmd, args)
+	local _team = args[1] && tonumber(args[1]) || 0;
+	ply:SetTeam(_team);
+	ply:Spawn();
 end
 concommand.Add( "set_team", ChangeMyTeam );
 
 function GM:PlayerSpawn(ply)
-	if (IsValid(ply.ragdoll)) then
-		ply.ragdoll:Remove()
+	if (IsValid(ply.Ragdoll)) then
+		ply.Ragdoll:Remove()
 	end
 	ply:SetModel("models/player/gasmask.mdl")
 	ply:SetupHands()
@@ -74,7 +74,13 @@ function GM:KeyPress(ply, key)
 end
 
 function GM:PlayerDeath(victim, inflictor, attacker)
-	if(victim.Powerup) then victim.Powerup = nil end
+	if(victim.Powerup) then 
+		victim.Powerup = nil 
+		victim:SetNWString("PowerupName","")
+		victim:SetNWBool("PoweredUp",false)
+		victim:SetNWBool("PoweredUp",false)
+	end
+
 	if(timer.Exists("PowerupTimer_"..victim:UserID())) then
 		timer.Adjust("PowerupTimer_"..victim:UserID(), 0, 1)
 	end
@@ -87,27 +93,23 @@ function GM:PlayerDeath(victim, inflictor, attacker)
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
-	ply:CreateRagdoll()
-	ply.ragdoll = ents.Create("prop_ragdoll")
-	ply.ragdoll:SetPos(ply:GetPos())
-   	ply.ragdoll:SetModel(ply:GetModel())
-  	ply.ragdoll:SetSkin(ply:GetSkin())
+	ply.Ragdoll = ents.Create("prop_ragdoll")
+	ply.Ragdoll:SetPos(ply:GetPos())
+   	ply.Ragdoll:SetModel(ply:GetModel())
+  	ply.Ragdoll:SetSkin(ply:GetSkin())
    	for key, value in pairs(ply:GetBodyGroups()) do
-    	ply.ragdoll:SetBodygroup(value.id, ply:GetBodygroup(value.id))	
+    	ply.Ragdoll:SetBodygroup(value.id, ply:GetBodygroup(value.id))	
    	end
-   	ply.ragdoll:SetAngles(ply:GetAngles())
-   	ply.ragdoll:SetColor(ply:GetColor())
-   	ply.ragdoll:Spawn()
-   	ply.ragdoll:Activate()
-	local num = ply.ragdoll:GetPhysicsObjectCount()-1
+   	ply.Ragdoll:SetAngles(ply:GetAngles())
+   	ply.Ragdoll:SetColor(ply:GetColor())
+   	ply.Ragdoll:Spawn()
+   	ply.Ragdoll:Activate()
+	local num = ply.Ragdoll:GetPhysicsObjectCount()-1
    	local v = ply:GetVelocity()
-   	if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_SLASH) then
-    	v = v / 5
-   	end
    	for i=0, num do
-      	local bone = ply.ragdoll:GetPhysicsObjectNum(i)
+      	local bone = ply.Ragdoll:GetPhysicsObjectNum(i)
       	if IsValid(bone) then
-        	local bp, ba = ply:GetBonePosition(ply.ragdoll:TranslatePhysBoneToBone(i))
+        	local bp, ba = ply:GetBonePosition(ply.Ragdoll:TranslatePhysBoneToBone(i))
         	if bp and ba then
         		bone:SetPos(bp)
         		bone:SetAngles(ba)
