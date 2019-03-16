@@ -3,34 +3,41 @@ local hide = {
 	["CHudHealth"] = true,
 	["CHudBattery"] = true,
     ["CHudAmmo"] = true,
-    ["CHudWeaponSelection"] = true
+    ["CHudWeaponSelection"] = true,
+    ["CHudCrosshair"] = true
 }
 
 hook.Add( "HUDShouldDraw", "HideHUD", function(name)
 	if (hide[name]) then return false end
 end)
 
-local padding = 100
-local width = {x=100,y=100}
-local pos = {x=0,y=ScrH()-width.y}
+local margin = 50
+local elementXPadding = 10
+local size = {x=300,y=100}
+local pos = {x=margin,y=ScrH()-size.y-margin}
 local PANEL = {}
 local fontsize = 10
-
+local backgroundColor = Color(100,100,100,255)
 
 function PANEL:Init()
-    self:SetSize(width.x,width.y)
     self:SetPos(pos.x,pos.y)
+    self:SetSize(size.x,size.y)
     self:ParentToHUD()
     self.HealthLabel = vgui.Create("DLabel", PANEL)
     self.PowerupLabel = vgui.Create("DLabel", PANEL)
-    self.PowerupLabel:SetPos(10, 20)
-    self.PowerupLabel:SetWidth(100)
     self.TimeLeft = vgui.Create("DLabel", PANEL)
-    self.TimeLeft:SetPos(10, 10)
-    self.HealthLabel:SetPos(10,30)
+    self.PowerupProgressBar = vgui.Create("DProgress", PANEL)
+    self.HealthLabel:SetPos(pos.x+elementXPadding,pos.y+10)
+    self.PowerupLabel:SetPos(pos.x+elementXPadding, pos.y+20)
+    self.TimeLeft:SetPos(pos.x+elementXPadding,pos.y+30)
+    self.PowerupProgressBar:SetPos(pos.x+elementXPadding, pos.y+40)
+    self.PowerupProgressBar:SetWidth(size.x-2*elementXPadding)
+    self.PowerupLabel:SetWidth(100)
+
 end
 
 function PANEL:Paint(w,h)
+    draw.RoundedBox(20, 0, 0,w, h, backgroundColor)
     if(IsValid(LocalPlayer())) then
         self.HealthLabel:SetText(LocalPlayer():Health())
         if(LocalPlayer():GetNWString("PowerupName")!="") then
@@ -40,13 +47,13 @@ function PANEL:Paint(w,h)
         end
         if(LocalPlayer():GetNWBool("PoweredUp")) then
             self.TimeLeft:SetText(LocalPlayer():GetNWInt("PowerupDuration")-LocalPlayer():GetNWInt("PowerupDuration")*LocalPlayer():GetNWFloat("PowerupFraction"))
+            self.PowerupProgressBar:SetFraction(LocalPlayer():GetNWFloat("PowerupFraction"))
         else
+            self.PowerupProgressBar:SetFraction(0)
             self.TimeLeft:SetText("")
         end
     else
-        print(LocalPlayer())
     end
-
 end
 
 vgui.Register( "HudPanel", PANEL, "DPanel" ) 

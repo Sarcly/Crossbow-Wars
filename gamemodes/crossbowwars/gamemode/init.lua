@@ -57,6 +57,7 @@ function GM:KeyPress(ply, key)
 				ply.PoweredUp = true
 				ply:SetNWFloat("PowerupFraction", 0)
 				ply:SetNWBool("PoweredUp", true)
+				ply:SetNWInt("PowerupDuration", duration)
 				ply.Powerup:Powerup(ply)
 				ply.PowerupIntervalCount = 0
 				ply.PowerupFraction = 0
@@ -74,6 +75,7 @@ function GM:KeyPress(ply, key)
 				ply.Powerup = nil
 			else
 				ply.Powerup:Powerup(ply)
+				ply:SetNWString("PowerupName","")
 				ply.Powerup = nil
 			end
 		end

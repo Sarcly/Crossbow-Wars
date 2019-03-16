@@ -3,7 +3,8 @@ include("cl_pickteam.lua")
 include("cl_drawhud.lua")
 
 local teamPanel = vgui.Create("TeamPanel")
-local hudPanel = vgui.Create("HudPanel")
+local hudpanel = vgui.Create("HudPanel")
+
 
 function GM:Think()
 
