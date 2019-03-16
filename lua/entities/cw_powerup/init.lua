@@ -92,6 +92,7 @@ function ENT:Think()
             local powerup_index = math.random(#powerup_table)
             ent:ChatPrint("Picked up "..powerup_table[powerup_index].name)
             ent.Powerup = powerup_table[powerup_index]
+            ent:SetNWString("PowerupName", ent.Powerup.name)
             self:Remove()
         end
     end

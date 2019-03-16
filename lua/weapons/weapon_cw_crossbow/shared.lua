@@ -9,12 +9,8 @@ SWEP.ViewModelFlip = false
 SWEP.ViewModelFOV = 54
 SWEP.ViewModel = "models/weapons/c_crossbow.mdl" 
 SWEP.WorldModel = "models/weapons/w_crossbow.mdl" 
-SWEP.DrawAmmo = true 
-
-game.AddAmmoType( {
-	name = "cwPowerup",
-	dmgtype = DMG_GENERIC
-})
+SWEP.DrawAmmo = false 
+SWEP.UseHands = true 
 
 SWEP.UseHands = true 
 SWEP.HoldType = "Crossbow" 
@@ -74,6 +70,9 @@ function SWEP:PrimaryAttack()
             local altered = ply:EyeAngles()
             altered:RotateAroundAxis(Vector(0,0,1),i*20)
             local alteredVec = altered:Forward()
+            local damageInfo = DamageInfo()
+            damageInfo:SetDamageType(DMG_BULLET)
+            bolt:TakeDamageInfo(damageInfo)
             bolt:SetOwner(self.Owner)
             bolt:SetPos(self.Owner:GetShootPos()+alteredVec*10)
             bolt:SetAngles(altered)
@@ -85,7 +84,11 @@ function SWEP:PrimaryAttack()
     else
         local bolt = ents.Create("crossbow_bolt")
         local baseVector = ply:GetAimVector():GetNormalized()
+        local damageInfo = DamageInfo()
+        damageInfo:SetDamageType(DMG_BULLET)
         bolt:SetOwner(self.Owner)
+        //bolt:SetSaveValue( "m_iDamage", 1)
+        bolt:TakeDamageInfo(damageInfo)
         bolt:SetPos(self.Owner:GetShootPos())
         bolt:SetAngles(self:EyeAngles())
         bolt:Spawn()

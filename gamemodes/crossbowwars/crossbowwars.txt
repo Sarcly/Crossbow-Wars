@@ -24,15 +24,6 @@
 			"type"		"Numeric"
 			"default"	"15"
 		}
-		
-		3
-		{
-			"name"		"cw_show_powerup_hitbox"
-			"text"		"Show Powerup Hitboxes"
-			"help"		"Shows the hitbox of the powerups"
-			"type"		"CheckBox"
-			"default"	"1"
-		}
 	}
 
 }
