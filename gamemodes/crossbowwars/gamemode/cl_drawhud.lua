@@ -18,6 +18,7 @@ local pos = {x=margin,y=ScrH()-size.y-margin}
 local PANEL = {}
 local fontsize = 10
 local backgroundColor = Color(100,100,100,255)
+local progressColor = Color(255,0,0,255)
 
 function PANEL:Init()
     self:SetPos(pos.x,pos.y)
@@ -30,11 +31,18 @@ function PANEL:Init()
     self.HealthLabel:SetPos(pos.x+elementXPadding,pos.y+10)
     self.PowerupLabel:SetPos(pos.x+elementXPadding, pos.y+20)
     self.TimeLeft:SetPos(pos.x+elementXPadding,pos.y+30)
-    self.PowerupProgressBar:SetPos(pos.x+elementXPadding, pos.y+40)
+    self.PowerupProgressBar:SetPos(pos.x+elementXPadding, pos.y+45)
     self.PowerupProgressBar:SetWidth(size.x-2*elementXPadding)
     self.PowerupLabel:SetWidth(100)
-
+    function self.PowerupProgressBar:Paint(w,h)
+        if(self:GetFraction()!=0) then
+            draw.RoundedBox(8, 0, 0, w*(1-self:GetFraction()), h, progressColor)
+        end
+    end
 end
+
+--[[ function PANEL.PowerupProgressBar:Paint(w,h)
+end ]]
 
 function PANEL:Paint(w,h)
     draw.RoundedBox(20, 0, 0,w, h, backgroundColor)

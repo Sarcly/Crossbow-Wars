@@ -64,17 +64,17 @@ function SWEP:PrimaryAttack()
     ply:ViewPunch(Angle(-2,0,0))
     if CLIENT then return end
     if(self.Owner.Multishot) then
-        for i=-1,1 do
+        for i=-3,3 do
             local bolt = ents.Create("crossbow_bolt")
             local baseVector = ply:GetAimVector():GetNormalized()
             local altered = ply:EyeAngles()
-            altered:RotateAroundAxis(Vector(0,0,1),i*20)
+            altered:RotateAroundAxis(Vector(0,0,1),i*10)
             local alteredVec = altered:Forward()
             local damageInfo = DamageInfo()
             damageInfo:SetDamageType(DMG_BULLET)
             bolt:TakeDamageInfo(damageInfo)
             bolt:SetOwner(self.Owner)
-            bolt:SetPos(self.Owner:GetShootPos()+alteredVec*10)
+            bolt:SetPos(self.Owner:GetShootPos()+alteredVec*20)
             bolt:SetAngles(altered)
             bolt:Spawn()
             bolt:Activate()
