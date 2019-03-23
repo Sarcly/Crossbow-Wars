@@ -12,8 +12,8 @@ hook.Add( "HUDShouldDraw", "HideHUD", function(name)
 end)
 
 local margin = 50
-local elementXPadding = 10
-local size = {x=300,y=100}
+local elementXPadding = 7.5
+local size = {x=300*1,y=100}
 local pos = {x=margin,y=ScrH()-size.y-margin}
 local PANEL = {}
 local fontsize = 10
@@ -31,7 +31,7 @@ function PANEL:Init()
     self.HealthLabel:SetPos(pos.x+elementXPadding,pos.y+10)
     self.PowerupLabel:SetPos(pos.x+elementXPadding, pos.y+20)
     self.TimeLeft:SetPos(pos.x+elementXPadding,pos.y+30)
-    self.PowerupProgressBar:SetPos(pos.x+elementXPadding, pos.y+45)
+    self.PowerupProgressBar:SetPos(pos.x+elementXPadding, pos.y+size.y-select(2,self.PowerupProgressBar:GetSize())*1.5)
     self.PowerupProgressBar:SetWidth(size.x-2*elementXPadding)
     self.PowerupLabel:SetWidth(100)
     function self.PowerupProgressBar:Paint(w,h)
@@ -45,7 +45,7 @@ end
 end ]]
 
 function PANEL:Paint(w,h)
-    draw.RoundedBox(20, 0, 0,w, h, backgroundColor)
+    draw.RoundedBox(16, 0, 0,w, h, backgroundColor)
     if(IsValid(LocalPlayer())) then
         self.HealthLabel:SetText(LocalPlayer():Health())
         if(LocalPlayer():GetNWString("PowerupName")!="") then
@@ -63,5 +63,10 @@ function PANEL:Paint(w,h)
     else
     end
 end
+
+function PANEL:PreAutoRefresh()
+    self:Remove()
+end
+
 
 vgui.Register( "HudPanel", PANEL, "DPanel" ) 
