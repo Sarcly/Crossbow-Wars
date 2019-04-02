@@ -128,3 +128,10 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
    	end
 end
 
+function GM:PreDrawHalos()
+	for i, ply in player.GetAll() do
+		if(ply:GetNWBool("cwshield")) then
+			halo.Add({ply,ply:GetWeapon("cw_crossbow")},Color(255,255,255), 2, 2, 1, true, false)
+		end
+	end
+end

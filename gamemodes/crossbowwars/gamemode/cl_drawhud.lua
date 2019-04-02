@@ -3,8 +3,7 @@ local hide = {
 	["CHudHealth"] = true,
 	["CHudBattery"] = true,
     ["CHudAmmo"] = true,
-    ["CHudWeaponSelection"] = true,
-    ["CHudCrosshair"] = true
+    ["CHudWeaponSelection"] = true
 }
 
 hook.Add( "HUDShouldDraw", "HideHUD", function(name)
@@ -18,7 +17,7 @@ local pos = {x=margin,y=ScrH()-size.y-margin}
 local PANEL = {}
 local fontsize = 10
 local backgroundColor = Color(100,100,100,255)
-local progressColor = Color(255,0,0,255)
+local progressColor = Color(255,0,0,100)
 
 function PANEL:Init()
     self:SetPos(pos.x,pos.y)

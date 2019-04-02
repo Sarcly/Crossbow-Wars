@@ -23,3 +23,15 @@ function GM:PlayerButtonDown(ply, key)
 	end	
 end
 
+
+function GM:PreDrawHalos()
+	for i, ply in pairs(player.GetAll()) do
+		//print(ply)
+		if(ply:GetNWBool("cwshield")) then
+			halo.Add( {ply,ply:GetWeapon("weapon_cw_crossbow")} , Color( 0, 0, 255 ), 5, 5, 2 )
+		end
+	end
+--[[     if (IsValid(LocalPlayer():GetEyeTrace().Entity)) then
+		halo.Add( {LocalPlayer():GetEyeTrace().Entity,LocalPlayer():GetEyeTrace().Entity:GetWeapon("weapon_cw_crossbow")} , Color( 255, 255, 255 ), 1, 1, 1 )
+    end ]]
+end
