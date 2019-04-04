@@ -3,9 +3,12 @@ AddCSLuaFile( "shared.lua" )
 AddCSLuaFile("cl_pickteam.lua")
 AddCSLuaFile("cl_drawhud.lua")
 include("shared.lua")
+include("round.lua")
 
-
-
+--[[ function GM:PlayerInitialSpawn(ply)
+	ply:SetTeam(1)
+end
+ ]]
 function GM:CreateTeams()
     team.SetUp(1,"Fighters", Color(255,0,0))
 	team.SetUp(2,"Spectators",Color(150,150,150))
@@ -87,9 +90,11 @@ function GM:PlayerDeath(victim, inflictor, attacker)
 		victim.Powerup = nil 
 		victim:SetNWString("PowerupName","")
 		victim:SetNWBool("PoweredUp",false)
-		victim:SetNWBool("PoweredUp",false)
 	end
+	print('attacker:'..tostring(attacker))
+	print('victim:'..tostring(victim))
 
+	attacker:AddFrags(1)
 	if(timer.Exists("PowerupTimer_"..victim:UserID())) then
 		timer.Adjust("PowerupTimer_"..victim:UserID(), 0, 1)
 	end
@@ -100,6 +105,8 @@ function GM:PlayerDeath(victim, inflictor, attacker)
 		timer.Adjust("PowerupStatus_"..victim:UserID(), 0, 1)
 	end
 end
+
+
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
 	ply.Ragdoll = ents.Create("prop_ragdoll")
@@ -113,6 +120,8 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
    	ply.Ragdoll:SetColor(ply:GetColor())
    	ply.Ragdoll:Spawn()
    	ply.Ragdoll:Activate()
+	ply.Ragdoll:SetCollisionGroup(COLLISION_GROUP_WORLD)
+	ply.Ragdoll:GetPhysicsObject():AddVelocity(ply.deathCrossbowVelocity*2)
 	local num = ply.Ragdoll:GetPhysicsObjectCount()-1
    	local v = ply:GetVelocity()
    	for i=0, num do
@@ -131,7 +140,7 @@ end
 function GM:PreDrawHalos()
 	for i, ply in player.GetAll() do
 		if(ply:GetNWBool("cwshield")) then
-			halo.Add({ply,ply:GetWeapon("cw_crossbow")},Color(255,255,255), 2, 2, 1, true, false)
+			halo.Add({ply,ply:GetWeapon("cw_crossbow"),ply:GetViewModel()},Color(255,255,255), 2, 2, 1, true, false)
 		end
 	end
 end

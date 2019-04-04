@@ -23,10 +23,10 @@ end
 
 
 function SWEP:PreDrawViewModel( vm,  weapon,  ply)
---[[     if(ply:GetNWBool("cwshield")) then
-        halo.Add({self,self:GetOwner()},Color(255,255,255), 2, 2, 1, true, false)
+    if(ply:GetNWBool("cwshield")) then
+        //halo.Add({self,self:GetOwner()},Color(255,255,255), 2, 2, 1, true, false)
         vm:SetColor(Color(0,0,255,255))
     else
         vm:SetColor(Color(255,255,255,255))
-    end ]]
+    end 
 end

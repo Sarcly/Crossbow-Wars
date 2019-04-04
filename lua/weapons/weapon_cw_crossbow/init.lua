@@ -10,22 +10,23 @@ hook.Add("EntityTakeDamage", "crossbowbolt_dmg",
         if !ent:IsPlayer() then return end
         local inf = dmg:GetInflictor()
 	    if IsValid(inf) and inf:GetClass() == "crossbow_bolt" then
-            if (!ent:GetNWBool("IsFakeHit")) then
+            if (!ent.FakeHitAlready) then
                 if (!ent:GetNWBool("cwshield")) then
-                    ent:Kill()
-                    ent.Ragdoll:GetPhysicsObject():AddVelocity(inf:GetVelocity()*2)
+                    dmg:SetDamage(100)
+                    ent.deathCrossbowVelocity=inf:GetVelocity()
                 else
                     inf:Remove()
+                    ent:EmitSound("npc/roller/mine/rmine_shockvehicle1.wav")
                     ent:SetNWBool("cwshield", false)
                 end
-                print("True")
-                ent:SetNWBool("IsFakeHit",true)
-                timer.Simple(1,  
+                ent.FakeHitAlready=true
+                timer.Simple(.01,  
                     function()
-                        print("false")
-                        ent:SetNWBool("IsFakeHit",false)
+                        ent.FakeHitAlready=false
                 end)
             else
+                ent.FakeHitAlready=false
+                dmg:SetDamage(0)
                 return
             end
         end
